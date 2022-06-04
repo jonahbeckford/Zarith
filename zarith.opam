@@ -17,6 +17,7 @@ depends: [
   "ocaml" {>="4.05.0"}
   "dune" {>="2.0"}
   "conf-gmp"
+  "dkml-c-probe" {>="3.0.0"}
 ]
 synopsis:
   "Implements arithmetic and logical operations over arbitrary-precision integers"

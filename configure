@@ -30,7 +30,7 @@ ocamldep='ocamldep'
 ocamldoc='ocamldoc'
 ccinc="$CPPFLAGS"
 cclib="$LDFLAGS"
-cclinkflags="$CCLINKERFLAGS"
+cclinkflags="$LDFLAGS $CCLINKERFLAGS"
 ccdef=''
 mlflags="$OCAMLFLAGS"
 mloptflags="$OCAMLOPTFLAGS"
@@ -438,6 +438,7 @@ detected configuration:
   dynamic linking:      $hasdynlink
   defines:              $ccdef
   libraries:            $cclib
+  link options:         $cclinkflags
   C options:            $ccopt
   installation path:    $installdir
   installation method   $instmeth
