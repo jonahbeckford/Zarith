@@ -29,7 +29,7 @@ ocamlmklib='ocamlmklib'
 ocamldep='ocamldep'
 ocamldoc='ocamldoc'
 ccinc="$CPPFLAGS"
-cclib="$LDFLAGS"
+cclib="$OCAMLMKLIBFLAGS"
 cclinkflags="$LDFLAGS $CCLINKERFLAGS"
 ccdef=''
 mlflags="$OCAMLFLAGS"
@@ -37,6 +37,7 @@ mloptflags="$OCAMLOPTFLAGS"
 mlinc="$OCAMLINC"
 objsuffix="o"
 exeext=""
+optimize1="-O"
 ocamlfind="auto"
 linkextrastart=""
 linkexe="-o "
@@ -78,12 +79,13 @@ EOF
 
 use_msvc() {
   linkextrastart="-link "
-  linkexe="-Fe"
-  linkobj="-Fo"
+  linkexe="/Fe"
+  linkobj="/Fo"
   linklibstart=""
   linklibend=".lib"
   objsuffix="obj"
   exeext=".exe"
+  optimize1="/O1"
 }
 
 # parse arguments
@@ -285,7 +287,7 @@ if test $? -eq 1; then hasocamlopt='yes'; fi
 checkcc
 if test $? -eq 0; then
     # try again with (almost) no options
-    ccopt='-O'
+    ccopt="$optimize1"
     checkcc
     if test $? -eq 0; then echo "cannot compile and link program"; exit 2; fi
 fi
@@ -448,9 +450,9 @@ detected configuration:
   native-code:          $hasocamlopt
   dynamic linking:      $hasdynlink
   defines:              $ccdef
-  libraries:            $cclib
-  link options:         $cclinkflags
-  C options:            $ccopt
+  ocamlmklib libraries: $cclib
+  C link options:       $cclinkflags
+  C compile options:    $ccopt
   installation path:    $installdir
   installation method   $instmeth
 

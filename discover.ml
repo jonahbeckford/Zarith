@@ -64,15 +64,17 @@ let flags =
     Printf.eprintf "WARNING: [loading C_conf] %s\n" msg;
     os_derived_flags
   | Ok c_conf ->
-    match C_conf.compiler_flags_of_ccomp_type c_conf ~ccomp_type ~clibrary:"gmp" with
-    | Error msg ->
+    let clibrary = "gmp" in
+    match C_conf.compiler_flags_of_ccomp_type c_conf ~ccomp_type ~clibrary, C_conf.tool_flags_ocamlmklib c_conf ~clibrary with
+    | Error msg, _ | _, Error msg ->
       Printf.eprintf "WARNING: [compiler_flags] %s\n" msg;
       os_derived_flags
-    | Ok None -> os_derived_flags
-    | Ok Some flags ->
+    | Ok None, _ | _, Ok None -> os_derived_flags
+    | Ok Some cflags, Ok Some ocamlmklibflags ->
       Format.asprintf
-        "LDFLAGS=\"%a\" CFLAGS=\"%a\""
-        fmt_list_of_string_with_space (C_conf.C_flags.link_flags_pathonly flags)
-        fmt_list_of_string_with_space (C_conf.C_flags.cc_flags flags)
+        "OCAMLMKLIBFLAGS=\"%a\" LDFLAGS=\"%a\" CFLAGS=\"%a\""
+        fmt_list_of_string_with_space (C_conf.Ocamlmklib_flags.lib_flags ocamlmklibflags)
+        fmt_list_of_string_with_space (C_conf.C_flags.link_flags_pathonly cflags)
+        fmt_list_of_string_with_space (C_conf.C_flags.cc_flags cflags)
 
 let () = Printf.printf "CC=\"%s\" %s%!" cc flags
