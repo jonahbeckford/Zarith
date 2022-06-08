@@ -224,6 +224,12 @@ checkcmxalib()
     return $r    
 }
 
+set_cc_base()
+{
+    set_cc_base_arg1=$1
+    shift
+    cc_base=$(basename "$set_cc_base_arg1")
+}
 
 # check required programs
 
@@ -239,7 +245,12 @@ if test -n "$CC"; then
   searchbinreq "$CC"
   cc="$CC"
   ccopt="$CFLAGS"
-  cc_base=`basename $cc`
+  # Use shell globbing to peel out the first argument of $cc (which
+  # may be
+  # '/c/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.26.28801/bin/HostX64/x64 -nologo -O2 -Gy- -MD')
+  # and then take its basename.
+  #     shellcheck disable=SC2086
+  set_cc_base $cc
   if test "$cc_base" = cl || test "$cc_base" = cl.exe; then
     use_msvc
   fi
