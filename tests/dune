@@ -5,52 +5,72 @@
 
 (executable
   (name zq)
-  (modes byte exe)
+  (modes js)
   (modules zq)
-  (libraries zarith))
+  (libraries zarith)
+  ; not needed in Dune 3.0.0+
+  ; Confer: https://github.com/ocaml/dune/issues/4027
+  (link_flags -no-check-prims))
+
+; (rule
+;   (alias runtest)
+;   (action
+;     (progn
+;      (with-stdout-to zq.out (run ./zq.exe))
+;      (diff zq.output%{ocaml-config:word_size} zq.out))))
 
 (rule
   (alias runtest)
+  (deps (:js ./zq.bc.js))
   (action
     (progn
-     (with-stdout-to zq.out (run ./zq.exe))
-     (diff zq.output%{ocaml-config:word_size} zq.out))))
-
-(rule
-  (alias runtest)
-  (action
-    (progn
-     (with-stdout-to zq.out.bc (run ./zq.bc))
-     (diff zq.output%{ocaml-config:word_size} zq.out.bc))))
+     (with-stdout-to zq.out.bc (run %{bin:node} %{js}))
+     ; JSOO has true 32-bit, not 31-bit like OCaml
+     (diff zq.outputjs zq.out.bc))))
 
 (executable
   (name pi)
-  (modes exe)
+  (modes js)
   (modules pi)
-  (libraries zarith))
+  (libraries zarith)
+  ; not needed in Dune 3.0.0+
+  ; Confer: https://github.com/ocaml/dune/issues/4027
+  (link_flags -no-check-prims))
 
 (rule
   (alias runtest)
+;   ; bin-available not present in Dune 2.9
+;   ; (enabled_if %{bin-available:node})
+  (deps (:js ./pi.bc.js))
   (action
     (progn
-     (with-stdout-to pi.out (run ./pi.exe 500))
+     (with-stdout-to pi.out (run %{bin:node} %{js} 500))
      (diff pi.output pi.out))))
 
 (test
   (name ofstring)
   (modules ofstring)
-  (modes exe)
-  (libraries zarith))
+  (modes js)
+  (libraries zarith)
+  ; not needed in Dune 3.0.0+
+  ; Confer: https://github.com/ocaml/dune/issues/4027
+  (link_flags -no-check-prims))
 
 (test
   (name timings)
   (modules timings)
-  (modes exe)
-  (libraries zarith))
+  (modes js)
+  (libraries zarith)
+  ; not needed in Dune 3.0.0+
+  ; Confer: https://github.com/ocaml/dune/issues/4027
+  (link_flags -no-check-prims))
 
-(test
-  (name tofloat)
-  (modules tofloat)
-  (modes exe)
-  (foreign_stubs (language c) (names setround))
-  (libraries zarith))
+; (test
+;   (name tofloat)
+;   (modules tofloat)
+;   (modes exe)
+;   (foreign_stubs (language c) (names setround))
+;   (libraries zarith)
+;   ; not needed in Dune 3.0.0+
+;   ; Confer: https://github.com/ocaml/dune/issues/4027
+;   (link_flags -no-check-prims))

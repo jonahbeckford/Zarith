@@ -8,6 +8,9 @@
 *.o
 *.so
 Makefile
-/_build/
 depend
 zarith_version.ml
+_build
+*.install
+*.merlin
+_opam
