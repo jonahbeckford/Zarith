@@ -8,5 +8,6 @@
 *.o
 *.so
 Makefile
+/_build/
 depend
 zarith_version.ml
