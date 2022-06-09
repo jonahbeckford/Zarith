@@ -47,7 +47,7 @@
      (with-stdout-to pi.out (run %{bin:node} %{js} 500))
      (diff pi.output pi.out))))
 
-(test
+(executable
   (name ofstring)
   (modules ofstring)
   (modes js)
@@ -55,8 +55,12 @@
   ; not needed in Dune 3.0.0+
   ; Confer: https://github.com/ocaml/dune/issues/4027
   (link_flags -no-check-prims))
+(rule
+  (alias runtest)
+  (deps (:js ./ofstring.bc.js))
+  (action (run %{bin:node} %{js})))
 
-(test
+(executable
   (name timings)
   (modules timings)
   (modes js)
@@ -64,13 +68,7 @@
   ; not needed in Dune 3.0.0+
   ; Confer: https://github.com/ocaml/dune/issues/4027
   (link_flags -no-check-prims))
-
-; (test
-;   (name tofloat)
-;   (modules tofloat)
-;   (modes exe)
-;   (foreign_stubs (language c) (names setround))
-;   (libraries zarith)
-;   ; not needed in Dune 3.0.0+
-;   ; Confer: https://github.com/ocaml/dune/issues/4027
-;   (link_flags -no-check-prims))
+(rule
+  (alias runtest)
+  (deps (:js ./timings.bc.js))
+  (action (run %{bin:node} %{js})))

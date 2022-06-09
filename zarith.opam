@@ -11,7 +11,7 @@ dev-repo: "git+https://github.com/dune-universe/Zarith.git"
 build: [
  [ "dune" "subst" ] {pinned}
  [ "dune" "build" "-p" name "-j" jobs ]
- [ "dune" "runtest" "-p" name "-j" jobs ]
+ [ "sh" "-c" "if command -v node; then dune runtest -p %{name}% -j %{jobs}%; fi" ] {with-test}
 ]
 depends: [
   "ocaml" {>="4.05.0"}
