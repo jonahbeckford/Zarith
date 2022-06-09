@@ -16,7 +16,6 @@ build: [
 depends: [
   "ocaml" {>="4.05.0"}
   "dune" {>="2.0"}
-  "conf-gmp"
 ]
 synopsis:
   "Implements arithmetic and logical operations over arbitrary-precision integers"
