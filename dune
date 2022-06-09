@@ -27,7 +27,7 @@
  (modules zarith_top)
  (libraries zarith compiler-libs.toplevel))
 
-(library (name zarith_stubs_js) (public_name zarith_stubs_js)
+(library (name zarith_stubs_js) (public_name zarith.stubs_js)
  (modules)
  (js_of_ocaml (javascript_files ./biginteger.js ./runtime.js)
   (flags --no-sourcemap))
